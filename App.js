@@ -1,5 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import { PlayerControls } from "./PlayerControls";
@@ -7,8 +9,11 @@ import { PlayerBar } from "./PlayerBar";
 import { LyricsView } from "./LyricsView";
 import { TrackList } from "./TrackList";
 import { usePlayerLogic } from "./PlayerLogic";
+import EditDetails from "./EditDetails";
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+const MainScreen = () => {
   const {
     sound,
     isPlaying,
@@ -32,7 +37,7 @@ export default function App() {
 
   const renderLyrics = () => (
     <LyricsView
-      lyrics={currentTrack?.lyrics || []}
+      currentTrack={currentTrack}
       onBack={() => setShowLyrics(false)}
     />
   );
@@ -87,9 +92,29 @@ export default function App() {
             isPlaying ? pauseSound : () => playSound(currentTrack, position)
           }
           onPress={() => setShowLyrics(true)}
+          currentTrack={currentTrack}
         />
       )}
     </View>
+  );
+};
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Main"
+          options={{ headerShown: false }}
+          component={MainScreen}
+        />
+        <Stack.Screen
+          name="EditDetails"
+          options={{ title: "Edit Details" }}
+          component={EditDetails}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

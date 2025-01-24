@@ -11,13 +11,12 @@ export const usePlayerLogic = () => {
   const [playMode, setPlayMode] = useState('normal');
   const [tracks, setTracks] = useState([]);
   const [currentTrack, setCurrentTrack] = useState(null);
-  const [trackMetadata, setTrackMetadata] = useState([]);
   const [showLyrics, setShowLyrics] = useState(false);
   const intervalRef = useRef();
 
   const loadTracks = async () => {
     try {
-      
+
       const musicFiles = await FileSystem.readDirectoryAsync('file:///storage/emulated/0/Music/');
       
       const audioFiles = musicFiles.filter(file => 
@@ -144,7 +143,6 @@ export const usePlayerLogic = () => {
     playMode,
     tracks,
     currentTrack,
-    trackMetadata,
     showLyrics,
     setShowLyrics,
     loadTracks,

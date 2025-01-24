@@ -1,14 +1,21 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Button,
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from "@react-navigation/native";
 
-export const LyricsView = ({ lyrics, onBack }) => {
+export const LyricsView = ({ onBack, currentTrack, onSave }) => {
+  const navigation = useNavigation();
+  const lyrics = currentTrack?.lyrics || [];
   return (
     <View style={styles.lyricsContainer}>
-      <TouchableOpacity 
-        style={styles.backButton}
-        onPress={onBack}
-      >
+      <TouchableOpacity style={styles.backButton} onPress={onBack}>
         <Icon name="arrow-back" size={30} color="#fff" />
       </TouchableOpacity>
       <ScrollView style={styles.lyricsScroll}>
@@ -21,6 +28,15 @@ export const LyricsView = ({ lyrics, onBack }) => {
         ) : (
           <Text style={styles.lyricsText}>歌詞がありません</Text>
         )}
+        <Button
+          title="詳細を編集"
+          onPress={() =>
+            navigation.navigate("EditDetails", {
+              track: currentTrack,
+              onSave: onSave,
+            })
+          }
+        />
       </ScrollView>
     </View>
   );
@@ -32,14 +48,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   backButton: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginBottom: 20,
   },
   lyricsScroll: {
     flex: 1,
   },
   lyricsText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
     lineHeight: 24,
   },
